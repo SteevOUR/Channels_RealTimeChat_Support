@@ -1,0 +1,20 @@
+<div class='grid grid-cols-4 gap-4'>
+    {% for room in rooms %}
+    <div class='p-4 rounded-xl {% if room.status == 'waiting' %}bg-yellow-100 {% elif room.status == 'active' %}bg-emerald-200 {% else %}bg-gray-300{% endif %}'>
+        <h3 class='mb-4 text-lg'><b>Chat</b></h3>
+
+        <table>
+            <tr><td class='p-2'><b>ID:     </b></td><td>{{room.uuid}}</td></tr>
+            <tr><td class='p-2'><b>Name:   </b></td><td>{{room.client}}</td></tr>
+            <tr><td class='p-2'><b>Status: </b></td><td>{{room.get_status_display}}</td></tr>
+            <tr><td class='p-2'><b>Agent:  </b></td><td>{% firstof room.agent.name 'None yet...' %}</td></tr>
+        </table>
+        <div class='flex justify-between'>
+            <a href="{% url 'chat:room' room.uuid %}" class='inline-block py-2 px-6 mt-4 bg-emerald-800 text-white rounded-xl'>Join</a>
+            {% if perms.chat.delete_room %}
+            <a href="{% url 'chat:delete_room' room.uuid %}" class='inline-block py-2 px-6 mt-4 bg-rose-800 text-white rounded-xl'>Delete</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
